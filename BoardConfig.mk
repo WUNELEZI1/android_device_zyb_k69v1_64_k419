@@ -13,13 +13,13 @@ ALLOW_MISSING_DEPENDENCIES := true
 # A/B
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS += \
-    system \
-    product \
-    system_ext \
     vendor \
     vbmeta_system \
     vbmeta_vendor \
-    boot
+    boot \
+    system \
+    product \
+    system_ext
 BOARD_USES_RECOVERY_AS_BOOT := true
 
 # Architecture
@@ -107,13 +107,8 @@ PLATFORM_VERSION := 16.1.0
 
 # TWRP Configuration
 TW_THEME := portrait_hdpi
-TW_EXTRA_LANGUAGES := false
-TW_DEFAULT_LANGUAGE := zh_CN
-TW_DEFAULT_BRIGHTNESS := 80
-TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_CRYPTO_FBE := true
+TW_EXTRA_LANGUAGES := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
-RECOVERY_SDCARD_ON_DATA := true
 TW_USE_TOOLBOX := true
 TW_INCLUDE_REPACKTOOLS := true

@@ -19,11 +19,11 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-service \
     android.hardware.boot@1.0.recovery \
     bootctrl.mt6768 \
-    bootctrl.mt6768.recovery
+    bootctrl.mt6768.recovery 
+
 
 PRODUCT_PACKAGES += \
     bootctrl
-
 PRODUCT_PACKAGES += \
     otapreopt_script \
     cppreopts.sh \

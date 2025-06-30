@@ -1,1 +1,0 @@
-device/zyb/k69v1_64_k419
