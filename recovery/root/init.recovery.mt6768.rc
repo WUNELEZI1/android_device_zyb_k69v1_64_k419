@@ -1,29 +1,3 @@
-on property : crypto.ready = 1
-    start keymaster - 3 - 0
-
-on property : crypto.ready = 0
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster - 3 - 0
-
-on property : ro.crypto.state = unsupported
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster - 3 - 0
-
-on property : ro.crypto.state = unencrypted
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster - 3 - 0
-
-on property : twrp.decrypt.done = true && property : twrp.all.users.decrypted = true
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster - 3 - 0
 on init
     setprop sys.usb.configfs 1
     setprop sys.usb.controller "musb-hdrc"
