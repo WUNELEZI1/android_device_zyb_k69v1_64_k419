@@ -12,6 +12,7 @@ ALLOW_MISSING_DEPENDENCIES := true
 
 # A/B
 AB_OTA_UPDATER := true
+BOARD_USES_VIRTUAL_AB := true
 AB_OTA_PARTITIONS += \
     vendor \
     vbmeta_system \
@@ -84,7 +85,7 @@ BOARD_SUPER_PARTITION_SIZE := 9126805504 # TODO: Fix hardcoded value
 BOARD_SUPER_PARTITION_GROUPS := zyb_dynamic_partitions
 BOARD_ZYB_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product
 BOARD_ZYB_DYNAMIC_PARTITIONS_SIZE := 9122611200 # TODO: Fix hardcoded value
-
+BOARD_SUPER_PARTITION_ENABLE := true
 # Platform
 TARGET_BOARD_PLATFORM := mt6768
 
@@ -95,9 +96,10 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 # Security patch level
 VENDOR_SECURITY_PATCH := 2021-08-01
-
+BOARD_USES_MTK_BOOTCTL := true
+TARGET_NO_RECOVERY := true
 # Verified Boot
-BOARD_AVB_ENABLE := true
+BOARD_AVB_ENABLE := false
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
 # Hack: prevent anti rollback
