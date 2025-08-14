@@ -8,14 +8,16 @@ on init
     setprop sys.usb.ffs.aio_compat 0
 
 on fs
-mkdir / metadata 0775 system system
-mount_all / fstab.mt6768
+    mkdir / metadata 0775 system system
+    mount_all / fstab.mt6768
     write /sys/class/power_supply/usb/otg_switch 1
     # distinguish USB shoulde connect or not, i.e. CDP vs SDP
     write /sys/class/udc/musb-hdrc/device/cmode 2
     # set charging free due to it wait for USB activation
     start adbd
-
+on property : ro.crypto.state = encrypted
+    exec / system / bin / vold --prepare_checkpoint = mtk_fbe
+    exec / system / bin / cryptfs setup_mtk_fbe / data
 on post-fs
     # Support A/B feature for EMMC and UFS boot region
 
