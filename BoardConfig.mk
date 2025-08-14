@@ -9,8 +9,19 @@ DEVICE_PATH := device/zyb/k69v1_64_k419
 
 # For building with minimal manifest
 ALLOW_MISSING_DEPENDENCIES := true
-
-# A/B
+TARGET_CRYPTFS_HW_PATH := vendor/mediatek/proprietary/hardware/libcryptfs
+TW_CRYPTO_REAL_BLKDEV := /dev/block/by-name/userdata
+TW_CRYPTO_MNT_POINT := /data
+TW_CRYPTO_FS_OPTIONS := "noatime,nosuid,nodev,discard"
+TW_CRYPTO_FS_TYPE := "f2fs"
+TW_CRYPTO_KEY_LOC := "footer"
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+TW_USE_MTK_CRYPTFS := true 
+MTK_PROJECT := k69v1_64_k419
+#A/B
+BOARD_USES_RECOVERY_AS_BOOT := true
 AB_OTA_UPDATER := true
 BOARD_USES_VIRTUAL_AB := true
 AB_OTA_PARTITIONS += \
@@ -21,8 +32,10 @@ AB_OTA_PARTITIONS += \
     system \
     product \
     system_ext
-BOARD_USES_RECOVERY_AS_BOOT := true
-
+BOARD_USES_MTK_HARDWARE := true
+TW_CRYPTO_USE_SYSTEM_VOLD := true
+TW_CRYPTO_SYSTEM_VOLD_MOUNT := /data
+TW_CRYPTO_SYSTEM_VOLD_KEY := /data/unencrypted/key
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
