@@ -1,14 +1,19 @@
+#
+# system.prop for ZYB ZPD1203 (k69v1_64_k419)
+# Values validated against device_info/all_props.txt & crypto.txt
+#
+
 # Platform
 ro.mediatek.platform=MT6768
 ro.hardware=mt6768
 
-# FBE encryption params (must match stock)
-ro.crypto.volume.filenames_mode=aes-256-cts:v2
-fbe.metadata.wrappedkey=true
-
-# Keymaster/Gatekeeper implementation
-ro.hardware.kmsetkey=beanpod
-ro.hardware.gatekeeper=beanpod
+# FBE encryption parameters (must match stock fstab.mt6768)
+#   fileencryption=aes-256-xts:aes-256-cts:v2
+ro.crypto.volume.filenames_mode=aes-256-cts
+ro.crypto.volume.contents_mode=aes-256-xts
+ro.crypto.dm_default_key.options_format.version=2
+ro.crypto.metadata.enabled=true
+ro.crypto.uses_fs_ioc_add_encryption_key=true
 
 # fstab prefix for post-install
 ro.postinstall.fstab.prefix=/system
