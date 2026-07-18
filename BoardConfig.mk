@@ -134,9 +134,15 @@ TW_INCLUDE_CRYPTO_FBE := true
 TW_INCLUDE_FBE_METADATA_DECRYPT := true
 # fscrypt policy (v2) is now auto-detected by TWRP 3.7.1 ("without setting Board")
 BOARD_USES_METADATA_PARTITION := true
-PLATFORM_SECURITY_PATCH := 2024-01-05
-PLATFORM_VERSION := 16.1.0
-VENDOR_SECURITY_PATCH := 2024-01-05
+# Security patch must match the real device
+# (ro.build.version.security_patch = 2024-07-05, per device_info/all_props.txt).
+PLATFORM_SECURITY_PATCH := 2024-07-05
+VENDOR_SECURITY_PATCH := 2024-07-05
+# NOTE: do NOT set PLATFORM_VERSION here. On the android-12.1 branch the build
+# system derives it as 12.1.0 automatically (build/core/version_defaults.mk).
+# The device is Android 12 (ro.bootimage.build.id = SP1A.210812.016, SDK 31);
+# a wrong value like 16.1.0 would target Android 16 and break against the 12.1
+# source tree (VNDK 31 vs 16 expectations, API-level checks, etc.).
 TW_FORCE_KEYMASTER_VER := true
 TW_PREPARE_DATA_MEDIA_EARLY := true
 RECOVERY_SDCARD_ON_DATA := true
