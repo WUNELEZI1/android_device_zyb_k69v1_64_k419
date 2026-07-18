@@ -136,7 +136,8 @@ RECOVERY_SDCARD_ON_DATA := true
 # VNDK / Shipping API (Android 12 / API 31)
 # ============================================================
 BOARD_VNDK_VERSION := current
-PRODUCT_SHIPPING_API_LEVEL := 31
+# PRODUCT_SHIPPING_API_LEVEL is readonly in A12+ and is auto-derived
+# from PLATFORM_SDK_VERSION by build/make/core/envsetup.mk (31 here).
 
 # ============================================================
 # Display / Theme (density confirmed = 280)
