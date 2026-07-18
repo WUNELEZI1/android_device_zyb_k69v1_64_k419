@@ -98,14 +98,27 @@ AB_OTA_PARTITIONS += \
 BOARD_USES_RECOVERY_AS_BOOT := true
 TARGET_NO_RECOVERY := false
 
-# Recovery-as-boot (BOARD_USES_RECOVERY_AS_BOOT := true, set just above).
-# NOTE: Do NOT set BOARD_BUILD_SYSTEM_ROOT_IMAGE here. A known-good TWRP tree
-# for this exact device (XiKoTaSu/android_device_ZYB_P30_twrp) builds fine with
-# ONLY BOARD_USES_RECOVERY_AS_BOOT := true and NO BOARD_BUILD_SYSTEM_ROOT_IMAGE
-# override; the recovery ramdisk is staged under recovery/root/first_stage_ramdisk
-# and the standalone $(PRODUCT_OUT)/root needed by the TWRP recovery-ramdisk rsync
-# is produced by forcing PRODUCT_BUILD_RAMDISK_IMAGE := true (see
-# twrp_k69v1_64_k419.mk, set AFTER the vendor/twrp/config/common.mk inherit).
+# Recovery-as-boot ramdisk staging (paired with BOARD_USES_RECOVERY_AS_BOOT := true above).
+# WHY THIS IS REQUIRED (verified against build/make android-12.1 core/Makefile):
+#   * The recovery-ramdisk recipe ($(INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP),
+#     core/Makefile ~line 2196) UNCONDITIONALLY does:
+#       rsync -a --exclude=sdcard ... $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
+#     i.e. it rsyncs FROM $(PRODUCT_OUT)/root into recovery/. There is NO
+#     BOARD_USES_RECOVERY_AS_BOOT branch that avoids /root.
+#   * $(TARGET_ROOT_OUT) (= out/.../root) is only populated when
+#     BUILDING_RAMDISK_IMAGE is true. AOSP core/config.mk sets
+#     BUILDING_RAMDISK_IMAGE := $(PRODUCT_BUILD_RAMDISK_IMAGE) and then CLEARS it
+#     whenever BOARD_BUILD_SYSTEM_ROOT_IMAGE is true. On a dynamic-partition A12
+#     device BOARD_BUILD_SYSTEM_ROOT_IMAGE DEFAULTS TO TRUE, so without the line
+#     below BUILDING_RAMDISK_IMAGE is cleared, /root is never staged, and the
+#     build fails at ~99% with: rsync ... /root ... "No such file or directory".
+#   * Setting this to false keeps BUILDING_RAMDISK_IMAGE true, so /root is built
+#     and the rsync succeeds. (PRODUCT_BUILD_RAMDISK_IMAGE := true in
+#     twrp_k69v1_64_k419.mk is kept as belt-and-suspenders; the gate above is the
+#     real fix.) NOTE: an older Android-base TWRP tree for this same device
+#     (XiKoTaSu) omits this flag only because its Makefile logic differs — on
+#     android-12.1 it is mandatory.
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
 
 # ============================================================
 # Dynamic partitions (Virtual A/B + VABC enabled on device)
