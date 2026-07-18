@@ -98,6 +98,20 @@ AB_OTA_PARTITIONS += \
 BOARD_USES_RECOVERY_AS_BOOT := true
 TARGET_NO_RECOVERY := false
 
+# Recovery-as-boot on Android 12: force a RAMDISK-based root (NOT system-as-root).
+# On dynamic-partition devices the build system defaults
+# BOARD_BUILD_SYSTEM_ROOT_IMAGE to true, which (see build/make/core/Makefile):
+#   ifneq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
+#     INTERNAL_BOOTIMAGE_ARGS += --ramdisk $(INSTALLED_RAMDISK_TARGET)
+#   endif
+# i.e. with system-as-root the boot image is built WITHOUT --ramdisk and the
+# build never stages out/target/product/k69v1_64_k419/root. The recovery
+# ramdisk assembly (INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP) then fails at
+# 99% with: rsync ... /root ... "No such file or directory". Setting this to
+# false makes the boot image include the recovery ramdisk and produces
+# $(PRODUCT_OUT)/root, which the recovery-ramdisk rsync expects.
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
+
 # ============================================================
 # Dynamic partitions (Virtual A/B + VABC enabled on device)
 # PRODUCT_USE_DYNAMIC_PARTITIONS is readonly in A12+ and is
