@@ -160,6 +160,9 @@ BOARD_VNDK_VERSION := current
 TARGET_SCREEN_DENSITY := 280
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TW_THEME := portrait_hdpi
+# Panel is mounted flipped/rotated; correct it in TWRP (common MTK fix,
+# confirmed by the reference device tree for this board).
+BOARD_HAS_FLIPPED_SCREEN := true
 
 # ============================================================
 # Brightness (MTK leds-mt65xx backlight)
@@ -173,6 +176,8 @@ TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 # ============================================================
 TW_HAS_USB := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
+# Blacklist the virtual "hbtp_vm" input device (MTK) to avoid phantom touches.
+TW_INPUT_BLACKLIST := "hbtp_vm"
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
 
 # ============================================================

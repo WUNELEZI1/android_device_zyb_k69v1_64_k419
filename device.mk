@@ -47,3 +47,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-service \
     android.hardware.keymaster@4.1-service
+
+# Health HAL, started by init.recovery.mt6768.rc ("start health-hal-2-1").
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.1-service
+
+# bootctrl for A/B slot switching from recovery (Switch Slot).
+PRODUCT_PACKAGES += \
+    bootctrl
