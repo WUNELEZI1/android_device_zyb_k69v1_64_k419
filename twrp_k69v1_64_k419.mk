@@ -23,11 +23,3 @@ PRODUCT_GMS_CLIENTID_BASE := android-mediatek
 
 # Inherit common TWRP config (provided by the TWRP minimal manifest).
 $(call inherit-product, vendor/twrp/config/common.mk)
-
-# Migrate common.mk's legacy BOARD_PLAT_*_SEPOLICY_DIR vars to the A12+
-# SYSTEM_EXT_*_SEPOLICY_DIRS so the deprecation warning from
-# build/make/core/soong_config.mk + system/sepolicy/Android.mk is silenced.
-# Kept in a SEPARATE file inherited here (after common.mk) because
-# $(call inherit-product,...) defers common.mk's inclusion - an inline
-# block would run before common.mk sets the vars and do nothing.
-$(call inherit-product, device/zyb/k69v1_64_k419/sepolicy_fix.mk)
