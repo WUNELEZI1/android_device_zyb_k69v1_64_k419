@@ -91,8 +91,9 @@ TARGET_NO_RECOVERY := false
 
 # ============================================================
 # Dynamic partitions (Virtual A/B + VABC enabled on device)
+# PRODUCT_USE_DYNAMIC_PARTITIONS is readonly in A12+ and is
+# auto-derived from BOARD_SUPER_PARTITION_SIZE below.
 # ============================================================
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
 BOARD_SUPER_PARTITION_SIZE := 10737418240
 BOARD_SUPER_PARTITION_GROUPS := main
 BOARD_MAIN_SIZE := 10733223936
