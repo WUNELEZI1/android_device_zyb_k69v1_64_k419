@@ -28,8 +28,12 @@ $(call inherit-product, vendor/twrp/config/common.mk)
 # The TWRP recovery-ramdisk recipe (INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP
 # in build/make core/Makefile) rsyncs FROM $(PRODUCT_OUT)/root. That directory
 # is only created when BUILDING_RAMDISK_IMAGE is true, which derives from
-# PRODUCT_BUILD_RAMDISK_IMAGE. The inherited TWRP config leaves it false, so the
-# build fails at ~99% with: rsync ... /root ... "No such file or directory".
+# PRODUCT_BUILD_RAMDISK_IMAGE. The inherited TWRP config (vendor/twrp/config/
+# common.mk) leaves it false, so the build fails at ~99% with:
+#   rsync ... /root ... "No such file or directory"
 # Force it true HERE (after the common.mk inherit) so it overrides any := set
-# earlier in the inheritance chain.
+# earlier in the inheritance chain. This is the real fix for the rsync failure.
+# (Do NOT add BOARD_BUILD_SYSTEM_ROOT_IMAGE := false in BoardConfig.mk: a
+# known-good tree for this exact device builds with only
+# BOARD_USES_RECOVERY_AS_BOOT := true and no such override.)
 PRODUCT_BUILD_RAMDISK_IMAGE := true

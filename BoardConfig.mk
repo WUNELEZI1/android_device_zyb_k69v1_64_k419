@@ -98,16 +98,14 @@ AB_OTA_PARTITIONS += \
 BOARD_USES_RECOVERY_AS_BOOT := true
 TARGET_NO_RECOVERY := false
 
-# Recovery-as-boot on Android 12: force a RAMDISK-based root (NOT system-as-root).
-# Setting BOARD_BUILD_SYSTEM_ROOT_IMAGE := false keeps BUILDING_RAMDISK_IMAGE
-# eligible, but the build still needs PRODUCT_BUILD_RAMDISK_IMAGE := true to
-# actually stage out/target/product/k69v1_64_k419/root. The TWRP recovery
-# ramdisk recipe (INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP in build/make
-# core/Makefile) rsyncs FROM $(PRODUCT_OUT)/root; if that dir is never created
-# the build fails at ~99% with: rsync ... /root ... "No such file or directory".
-# PRODUCT_BUILD_RAMDISK_IMAGE := true is forced in twrp_k69v1_64_k419.mk AFTER
-# the vendor/twrp/config/common.mk inherit (which otherwise leaves it false).
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
+# Recovery-as-boot (BOARD_USES_RECOVERY_AS_BOOT := true, set just above).
+# NOTE: Do NOT set BOARD_BUILD_SYSTEM_ROOT_IMAGE here. A known-good TWRP tree
+# for this exact device (XiKoTaSu/android_device_ZYB_P30_twrp) builds fine with
+# ONLY BOARD_USES_RECOVERY_AS_BOOT := true and NO BOARD_BUILD_SYSTEM_ROOT_IMAGE
+# override; the recovery ramdisk is staged under recovery/root/first_stage_ramdisk
+# and the standalone $(PRODUCT_OUT)/root needed by the TWRP recovery-ramdisk rsync
+# is produced by forcing PRODUCT_BUILD_RAMDISK_IMAGE := true (see
+# twrp_k69v1_64_k419.mk, set AFTER the vendor/twrp/config/common.mk inherit).
 
 # ============================================================
 # Dynamic partitions (Virtual A/B + VABC enabled on device)
