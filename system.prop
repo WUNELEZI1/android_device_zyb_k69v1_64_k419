@@ -1,0 +1,14 @@
+# Platform
+ro.mediatek.platform=MT6768
+ro.hardware=mt6768
+
+# FBE encryption params (must match stock)
+ro.crypto.volume.filenames_mode=aes-256-cts:v2
+fbe.metadata.wrappedkey=true
+
+# Keymaster/Gatekeeper implementation
+ro.hardware.kmsetkey=beanpod
+ro.hardware.gatekeeper=beanpod
+
+# fstab prefix for post-install
+ro.postinstall.fstab.prefix=/system

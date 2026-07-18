@@ -1,0 +1,8 @@
+$(call inherit-product, vendor/twrp/twrp-vendor.mk)
+
+PRODUCT_DEVICE := k69v1_64_k419
+PRODUCT_NAME := twrp_k69v1_64_k419
+PRODUCT_BRAND := ZYB
+PRODUCT_MODEL := ZPD1203
+PRODUCT_MANUFACTURER := zyb
+PRODUCT_RELEASE_NAME := ZYB ZPD1203

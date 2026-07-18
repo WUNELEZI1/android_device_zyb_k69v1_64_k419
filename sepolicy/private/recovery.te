@@ -1,0 +1,57 @@
+# TWRP recovery 域的权限
+
+# 分区操作
+allow recovery blk_device:blk_file { read write ioctl open getattr };
+allow recovery dm_device:chr_file { read write ioctl open getattr create };
+allow recovery metadata_block_device:blk_file { read write ioctl open getattr };
+
+# 解密支持
+allow recovery hal_keymaster_default:binder { call transfer };
+allow recovery hal_gatekeeper_default:binder { call transfer };
+allow recovery hal_boot_default:binder { call transfer };
+allow recovery keystore:s0 { read write open getattr };
+
+# sysfs 访问
+allow recovery sysfs_leds:file { read write open getattr };
+allow recovery sysfs_battery:file { read write open getattr };
+allow recovery thermal_zone:file { read write open getattr };
+
+# USB gadget
+allow recovery configfs:dir { create read write open search add_name remove_name getattr };
+allow recovery configfs:file { read write open getattr create };
+allow recovery ffs_device:chr_file { read write open getattr ioctl };
+
+# 挂载操作
+allow recovery tmpfs:dir { create read write open search add_name remove_name mounton };
+allow recovery tmpfs:file { read write open getattr create unlink };
+allow recovery rootfs:dir { create read write open search add_name remove_name mounton };
+allow recovery rootfs:file { read write open getattr create };
+
+# misc 分区 - 修复 bootonce 循环问题
+allow recovery misc_block_device:blk_file { read write ioctl open };
+
+# vendor 文件
+allow recovery vendor_file:dir { read search open };
+allow recovery vendor_file:file { read open getattr };
+
+# preloader
+allow recovery preloader_device:blk_file { read write ioctl open getattr };
+
+# 允许 recovery 执行关键命令
+allow recovery shell_exec:file { read open getattr execute };
+allow recovery toolbox_exec:file { read open getattr execute };
+
+# binder 通信
+allow recovery servicemanager:binder { call transfer };
+allow recovery hwservicemanager:binder { call transfer };
+allow recovery vndservicemanager:binder { call transfer };
+
+# logcat
+allow recovery log_device:chr_file { read write open };
+
+# 进程信号
+allow recovery init:process { sigkill signal };
+
+# MTK 特有
+allow recovery block_device:dir { search };
+allow recovery sysfs:file { read write open getattr };

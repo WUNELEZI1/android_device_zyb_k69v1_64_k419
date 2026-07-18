@@ -1,0 +1,46 @@
+# MTK 特有文件上下文
+/dev/block/mmcblk0            u:object_r:blk_device:s0
+/dev/block/mmcblk0p.*         u:object_r:blk_device:s0
+/dev/block/by-name(/.*)?      u:object_r:blk_device:s0
+/dev/block/dm-.*              u:object_r:dm_device:s0
+/dev/block/mapper(/.*)?       u:object_r:dm_device:s0
+
+# MTK preloader
+/dev/block/mmcblk0boot0       u:object_r:preloader_device:s0
+/dev/block/mmcblk0boot1       u:object_r:preloader_device:s0
+
+# metadata 加密
+/metadata(/.*)?                u:object_r:metadata_file:s0
+/metadata/vold(/.*)?           u:object_r:vold_metadata_file:s0
+
+# MTK vendor 分区
+/mnt/vendor(/.*)?              u:object_r:vendor_file:s0
+
+# keymaster/gatekeeper
+/vendor/bin/hw/android\.hardware\.keymaster@4\.1-service   u:object_r:hal_keymaster_default_exec:s0
+/vendor/bin/hw/android\.hardware\.gatekeeper@1\.0-service   u:object_r:hal_gatekeeper_default_exec:s0
+/vendor/bin/hw/android\.hardware\.boot@1\.2-service        u:object_r:hal_boot_default_exec:s0
+
+# sysfs
+/sys/devices/platform/leds-mt65xx(/.*)?   u:object_r:sysfs_leds:s0
+/sys/class/leds(/.*)?                      u:object_r:sysfs_leds:s0
+/sys/class/power_supply(/.*)?              u:object_r:sysfs_battery:s0
+/sys/class/thermal(/.*)?                   u:object_r:thermal_zone:s0
+/sys/block/mmcblk0(/.*)?                   u:object_r:sysfs:block_device:s0
+
+# USB gadget
+/config/usb_gadget(/.*)?      u:object_r:configfs:s0
+/dev/usb-ffs(/.*)?            u:object_r:ffs_device:s0
+
+# recovery
+/etc/recovery\.fstab          u:object_r:recovery_file:s0
+/tmp(/.*)?                     u:object_r:tmpfs:s0
+
+# TWRP
+/sbin(/.*)?                    u:object_r:rootfs:s0
+
+# 数据解密密钥
+/metadata/vold/metadata_encryption(/.*)?  u:object_r:vold_metadata_file:s0
+
+# boot HAL
+/vendor/bin/hw/android\.hardware\.boot@1\.2-service  u:object_r:hal_boot_default_exec:s0

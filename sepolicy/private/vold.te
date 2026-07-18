@@ -1,0 +1,17 @@
+# 允许 vold 解密 data - MTK inlinecrypt
+allow vold userdata_block_device:blk_file { read write getattr ioctl open };
+allow vold metadata_block_device:blk_file { read write getattr ioctl open };
+allow vold dm_device:chr_file { read write getattr ioctl open };
+allow vold fscrypt:s0 { read write getattr ioctl open };
+
+# 允许 vold 访问 keymaster
+allow vold hal_keymaster_default:binder { call transfer };
+allow vold keystore:s0 { read write open getattr };
+
+# 允许 vold 挂载 metadata
+allow vold metadata_file:dir { read write open search add_name remove_name };
+allow vold metadata_file:file { read write open getattr create unlink };
+
+# 允许 vold 访问 MTK vendor 分区
+allow vold vendor_file:dir { read write open search };
+allow vold vendor_file:file { read write open getattr };

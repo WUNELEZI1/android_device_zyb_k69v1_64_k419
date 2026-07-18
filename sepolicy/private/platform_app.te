@@ -1,0 +1,2 @@
+# TWRP 解密相关 - 允许 vold 和 recovery 访问 MTK TEE
+allow platform_app tee_device:chr_file { read write ioctl open getattr };

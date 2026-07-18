@@ -1,0 +1,2 @@
+# MTK TEE 相关属性
+attribute hal_tee_client;
