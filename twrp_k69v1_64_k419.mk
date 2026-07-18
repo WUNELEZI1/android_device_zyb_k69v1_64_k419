@@ -23,3 +23,17 @@ PRODUCT_GMS_CLIENTID_BASE := android-mediatek
 
 # Inherit common TWRP config (provided by the TWRP minimal manifest).
 $(call inherit-product, vendor/twrp/config/common.mk)
+
+# Silence the A12 deprecation warning that TWRP's common.mk triggers by
+# still assigning the legacy BOARD_PLAT_*_SEPOLICY_DIR vars. Migrate them
+# to the A12+ equivalents recommended by build/make/core/soong_config.mk.
+# (Guarded so it is a no-op if common.mk stops setting them; and it keeps
+# the original sepolicy paths included, just under the modern variable.)
+ifneq ($(BOARD_PLAT_PUBLIC_SEPOLICY_DIR),)
+SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += $(BOARD_PLAT_PUBLIC_SEPOLICY_DIR)
+BOARD_PLAT_PUBLIC_SEPOLICY_DIR :=
+endif
+ifneq ($(BOARD_PLAT_PRIVATE_SEPOLICY_DIR),)
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(BOARD_PLAT_PRIVATE_SEPOLICY_DIR)
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR :=
+endif

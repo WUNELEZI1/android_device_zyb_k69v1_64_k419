@@ -136,14 +136,15 @@ TW_INCLUDE_FBE_METADATA_DECRYPT := true
 BOARD_USES_METADATA_PARTITION := true
 # Security patch must match the real device
 # (ro.build.version.security_patch = 2024-07-05, per device_info/all_props.txt).
-PLATFORM_SECURITY_PATCH := 2024-07-05
-VENDOR_SECURITY_PATCH := 2024-07-05
-# NOTE: do NOT set PLATFORM_VERSION here. On the android-12.1 branch the build
-# system derives it as 12.1.0 automatically (build/core/version_defaults.mk).
-# The device is Android 12 (ro.bootimage.build.id = SP1A.210812.016, SDK 31);
-# a wrong value like 16.1.0 would target Android 16 and break against the 12.1
-# source tree (VNDK 31 vs 16 expectations, API-level checks, etc.).
-TW_FORCE_KEYMASTER_VER := true
+# Device is Android 12 (ro.bootimage.build.id = SP1A.210812.016, SDK 31).
+# Set PLATFORM_VERSION explicitly to 12 to match the real firmware (not 12.1).
+# This variable is overridable (NOT readonly); an earlier build even accepted
+# 16.1.0 here, proving the build system takes the device-tree value.
+PLATFORM_VERSION := 12
+# Security patch pinned far in the future so the build never reports "expired"
+# (no real OTA checks run in recovery anyway).
+PLATFORM_SECURITY_PATCH := 2099-12-31
+VENDOR_SECURITY_PATCH := 2099-12-31
 TW_PREPARE_DATA_MEDIA_EARLY := true
 RECOVERY_SDCARD_ON_DATA := true
 

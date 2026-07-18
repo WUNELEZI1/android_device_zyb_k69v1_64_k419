@@ -41,6 +41,14 @@ PRODUCT_PACKAGES += \
     make_f2fs \
     fsck.f2fs
 
+# snapuserd: userspace daemon for Virtual A/B (VABC) snapshot management.
+# Required so TWRP can flash/rollback the dynamic (super) partitions on this
+# device (ro.virtual_ab.compression.enabled=true). Source is present in the
+# minimal TWRP manifest (system/core/fs_mgr); the build log confirms
+# libsnapshot_nobinder is already compiled.
+PRODUCT_PACKAGES += \
+    snapuserd
+
 # ============================================================
 # Keymaster 4.1 / Gatekeeper 1.0 (for FBE decryption in recovery)
 # ============================================================
