@@ -23,3 +23,13 @@ PRODUCT_GMS_CLIENTID_BASE := android-mediatek
 
 # Inherit common TWRP config (provided by the TWRP minimal manifest).
 $(call inherit-product, vendor/twrp/config/common.mk)
+
+# Force the generic ramdisk (out/target/product/<dev>/root) to be staged.
+# The TWRP recovery-ramdisk recipe (INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP
+# in build/make core/Makefile) rsyncs FROM $(PRODUCT_OUT)/root. That directory
+# is only created when BUILDING_RAMDISK_IMAGE is true, which derives from
+# PRODUCT_BUILD_RAMDISK_IMAGE. The inherited TWRP config leaves it false, so the
+# build fails at ~99% with: rsync ... /root ... "No such file or directory".
+# Force it true HERE (after the common.mk inherit) so it overrides any := set
+# earlier in the inheritance chain.
+PRODUCT_BUILD_RAMDISK_IMAGE := true

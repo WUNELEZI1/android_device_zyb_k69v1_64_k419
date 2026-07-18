@@ -99,17 +99,14 @@ BOARD_USES_RECOVERY_AS_BOOT := true
 TARGET_NO_RECOVERY := false
 
 # Recovery-as-boot on Android 12: force a RAMDISK-based root (NOT system-as-root).
-# On dynamic-partition devices the build system defaults
-# BOARD_BUILD_SYSTEM_ROOT_IMAGE to true, which (see build/make/core/Makefile):
-#   ifneq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
-#     INTERNAL_BOOTIMAGE_ARGS += --ramdisk $(INSTALLED_RAMDISK_TARGET)
-#   endif
-# i.e. with system-as-root the boot image is built WITHOUT --ramdisk and the
-# build never stages out/target/product/k69v1_64_k419/root. The recovery
-# ramdisk assembly (INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP) then fails at
-# 99% with: rsync ... /root ... "No such file or directory". Setting this to
-# false makes the boot image include the recovery ramdisk and produces
-# $(PRODUCT_OUT)/root, which the recovery-ramdisk rsync expects.
+# Setting BOARD_BUILD_SYSTEM_ROOT_IMAGE := false keeps BUILDING_RAMDISK_IMAGE
+# eligible, but the build still needs PRODUCT_BUILD_RAMDISK_IMAGE := true to
+# actually stage out/target/product/k69v1_64_k419/root. The TWRP recovery
+# ramdisk recipe (INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP in build/make
+# core/Makefile) rsyncs FROM $(PRODUCT_OUT)/root; if that dir is never created
+# the build fails at ~99% with: rsync ... /root ... "No such file or directory".
+# PRODUCT_BUILD_RAMDISK_IMAGE := true is forced in twrp_k69v1_64_k419.mk AFTER
+# the vendor/twrp/config/common.mk inherit (which otherwise leaves it false).
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
 
 # ============================================================
