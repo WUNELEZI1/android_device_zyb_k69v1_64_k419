@@ -9,9 +9,11 @@
 # ============================================================
 # Dynamic partitions + VNDK (Android 12 / VNDK 31)
 # ============================================================
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
+# NOTE: PRODUCT_USE_DYNAMIC_PARTITIONS and PRODUCT_SHIPPING_API_LEVEL
+# are READONLY in Android 12+ and are auto-derived (from
+# BOARD_SUPER_PARTITION_SIZE and PLATFORM_SDK_VERSION respectively).
+# They must NOT be assigned here or in BoardConfig.mk.
 PRODUCT_TARGET_VNDK_VERSION := 31
-PRODUCT_SHIPPING_API_LEVEL := 31
 PRODUCT_VENDOR_MOVE_ENABLED := true
 
 # ============================================================

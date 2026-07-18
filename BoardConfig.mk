@@ -34,13 +34,22 @@ TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a75
 TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 
+# 64-bit device (arm64 + 32-bit 2nd arch) that supports 64-bit apps.
+# Required by build/make/core/board_config.mk in Android 12+, otherwise
+# it errors: "Building a 32-bit-app-only product on a 64-bit device."
+TARGET_SUPPORTS_64_BIT_APPS := true
+
 # ============================================================
 # Kernel (prebuilt) - boot header v2, dtb embedded in boot.img
 # Confirmed: page_size=2048, cmdline & offsets from stock boot.img
 # ============================================================
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
-BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+# NOTE: Do NOT set BOARD_INCLUDE_DTB_IN_BOOTIMG here. On boot header v2
+# the DTB is passed separately via --dtb (see BOARD_MKBOOTIMG_ARGS below),
+# matching the stock boot.img layout (DTB at dtb_offset 0x0bc08000).
+# Setting BOARD_INCLUDE_DTB_IN_BOOTIMG := true would append the DTB to the
+# kernel AND pass --dtb again -> duplicate DTB in the boot image.
 
 # Load addresses derived from the real stock boot.img header:
 #   kernel_addr=0x40080000  ramdisk_addr=0x47c80000  tags_addr=0x4bc80000
