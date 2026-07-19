@@ -1,0 +1,46 @@
+# First-stage ramdisk fstab for ZYB ZPD1203 (k69v1_64_k419) - MediaTek MT6768
+# Adapted from stock vendor/mediatek/proprietary/hardware/fstab/mt6768/fstab.in.mt6768
+# Purpose: declare dynamic (super) + metadata partitions for early/snapuserd
+# (VABC) handling in recovery. Installed verbatim into the recovery ramdisk at
+# /first_stage_ramdisk/fstab.mt6768 by the recovery-ramdisk recipe.
+# (cpp preprocessing directives from the stock .in file have been stripped.)
+
+system /system ext4 ro wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+system_ext /system_ext ext4 ro wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+vendor /vendor ext4 ro wait,slotselect,avb,logical,first_stage_mount
+product /product ext4 ro wait,slotselect,avb,logical,first_stage_mount
+/md_udc /metadata ext4 noatime,nosuid,nodev,discard wait,check,formattable,first_stage_mount
+/userdata /data ext4 noatime,nosuid,nodev,noauto_da_alloc,errors=panic,inlinecrypt wait,check,formattable,quota,latemount,resize,,reservedsize=128m,checkpoint=block,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption
+/protect1 /mnt/vendor/protect_f ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
+/protect2 /mnt/vendor/protect_s ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
+/nvdata /mnt/vendor/nvdata ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
+/nvcfg /mnt/vendor/nvcfg ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
+/devices/platform/externdevice* auto auto defaults voldmanaged=sdcard1:auto,encryptable=userdata
+/devices/platform/mt_usb* auto vfat defaults voldmanaged=usbotg:auto
+/frp /persistent emmc defaults defaults
+/nvram /nvram emmc defaults defaults
+/proinfo /proinfo emmc defaults defaults
+/lk /bootloader emmc defaults defaults
+/lk2 /bootloader2 emmc defaults defaults
+/misc /misc emmc defaults defaults
+/para /para emmc defaults defaults
+/vendor_boot /vendor_boot emmc defaults defaults
+/boot /boot emmc defaults first_stage_mount,nofail,slotselect
+/vbmeta_vendor /vbmeta_vendor emmc defaults first_stage_mount,nofail,slotselect
+/vbmeta_system /vbmeta_system emmc defaults first_stage_mount,nofail,slotselect,avb=vbmeta
+/logo /logo emmc defaults defaults
+/expdb /expdb emmc defaults defaults
+/seccfg /seccfg emmc defaults defaults
+/tee1 /tee1 emmc defaults defaults
+/tee2 /tee2 emmc defaults defaults
+/sspm_1 /sspm_1 emmc defaults defaults
+/sspm_2 /sspm_2 emmc defaults defaults
+/md1img /md1img emmc defaults defaults
+/md1dsp /md1dsp emmc defaults defaults
+/gz1 /gz1 emmc defaults defaults
+/gz2 /gz2 emmc defaults defaults
+/spmfw /spmfw emmc defaults defaults
+/boot_para /boot_para emmc defaults defaults
+/dtbo /dtbo emmc defaults defaults
+/otp /otp emmc defaults defaults
+/vbmeta /vbmeta emmc defaults defaults
