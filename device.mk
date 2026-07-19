@@ -100,6 +100,7 @@ PRODUCT_COPY_FILES += \
 # decryption in recovery. Providing prebuilts here fixes both.
 PRODUCT_COPY_FILES += \
     device/zyb/k69v1_64_k419/recovery/root/system/bin/linker64:root/system/bin/linker64 \
+    device/zyb/k69v1_64_k419/recovery/root/system/bin/sh:root/system/bin/sh \
     device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.keymaster@4.1-service:root/vendor/bin/hw/android.hardware.keymaster@4.1-service \
     device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service:root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service
 
