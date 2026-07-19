@@ -71,3 +71,10 @@ on post-fs-data
 
 on boot
     start health-hal-2-1
+    # Boot HAL: required for A/B active-slot switching (Reboot -> System).
+    # Its rc (android.hardware.boot@1.2-service.rc) declares the service
+    # "boot-hal-1-2" as disabled, so it is not auto-started. Start it
+    # explicitly so TWRP's IBootControl can switch slots; without this,
+    # reboot always returns to recovery (the same bug as the senior
+    # TWRP build, which also leaves the boot HAL disabled).
+    start boot-hal-1-2

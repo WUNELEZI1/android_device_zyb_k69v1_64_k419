@@ -24,8 +24,6 @@ PRODUCT_PACKAGES += \
     fastbootd
 
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.2-impl \
-    android.hardware.boot@1.2-impl.recovery \
     android.hardware.boot@1.2-service
 
 # ============================================================
@@ -106,6 +104,18 @@ PRODUCT_COPY_FILES += \
     device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so:root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so \
     device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/gatekeeper.default.so:root/vendor/lib64/hw/gatekeeper.default.so \
     device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/libSoftGatekeeper.so:root/vendor/lib64/hw/libSoftGatekeeper.so
+
+# ============================================================
+# Boot HAL backend (passthrough impl) for A/B slot switching
+# ============================================================
+# android.hardware.boot@1.2-service dlopens android.hardware.boot@1.0-impl-1.2.so
+# at runtime to provide IBootControl. The minimal TWRP manifest does NOT build
+# this device-specific impl (skipped under ALLOW_MISSING_DEPENDENCIES), so we
+# stage the prebuilt pulled from a known-good TWRP for this SoC. Without it the
+# boot HAL service cannot provide IBootControl and TWRP cannot switch the active
+# A/B slot (Reboot -> System fails -> always returns to recovery).
+PRODUCT_COPY_FILES += \
+    device/zyb/k69v1_64_k419/recovery/root/system/lib64/hw/android.hardware.boot@1.0-impl-1.2.so:root/system/lib64/hw/android.hardware.boot@1.0-impl-1.2.so
 
 # ============================================================
 # Recovery binary (TWRP/recovery executable)
