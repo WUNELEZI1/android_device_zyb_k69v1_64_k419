@@ -85,6 +85,25 @@ PRODUCT_COPY_FILES += \
     device/zyb/k69v1_64_k419/recovery/root/system/etc/recovery.fstab:root/system/etc/recovery.fstab
 
 # ============================================================
+# Critical missing binaries (fix bootloop + enable decryption)
+# ============================================================
+# linker64 (64-bit dynamic linker): the recovery ramdisk /init ->
+# /system/bin/init is a dynamically-linked ELF whose PT_INTERP is
+# /system/bin/linker64. Without linker64 the kernel cannot exec
+# /init -> kernel panic -> black-screen bootloop. The minimal TWRP
+# manifest does not build bionic's linker into the recovery ramdisk,
+# so we stage the prebuilt (from a known-good TWRP for this SoC).
+# keymaster@4.1 / gatekeeper@1.0: declared in PRODUCT_PACKAGES above
+# but source is absent from the minimal manifest and silently skipped
+# under ALLOW_MISSING_DEPENDENCIES=true. Both are dynamically linked
+# (interpreter /system/bin/linker64) and required for FBE data
+# decryption in recovery. Providing prebuilts here fixes both.
+PRODUCT_COPY_FILES += \
+    device/zyb/k69v1_64_k419/recovery/root/system/bin/linker64:root/system/bin/linker64 \
+    device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.keymaster@4.1-service:root/vendor/bin/hw/android.hardware.keymaster@4.1-service \
+    device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service:root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service
+
+# ============================================================
 # Recovery binary (TWRP/recovery executable)
 # ============================================================
 # Explicitly request the recovery module. It is installed at
