@@ -96,14 +96,18 @@ PRODUCT_COPY_FILES += \
 # under ALLOW_MISSING_DEPENDENCIES=true. Both are dynamically linked
 # (interpreter /system/bin/linker64) and required for FBE data
 # decryption in recovery. Providing prebuilts here fixes both.
-PRODUCT_COPY_FILES += \
-    device/zyb/k69v1_64_k419/recovery/root/system/bin/linker64:root/system/bin/linker64 \
-    device/zyb/k69v1_64_k419/recovery/root/system/bin/sh:root/system/bin/sh \
-    device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.keymaster@4.1-service:root/vendor/bin/hw/android.hardware.keymaster@4.1-service \
-    device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service:root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service \
-    device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so:root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so \
-    device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/gatekeeper.default.so:root/vendor/lib64/hw/gatekeeper.default.so \
-    device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/libSoftGatekeeper.so:root/vendor/lib64/hw/libSoftGatekeeper.so
+# These ELF binaries are installed as proper prebuilt modules (BUILD_PREBUILT,
+# defined at the end of this file) into $(TARGET_ROOT_OUT). The recovery build
+# REJECTS ELF files staged via PRODUCT_COPY_FILES into the ramdisk
+# (check-non-elf-file-timestamps); prebuilt modules are the correct mechanism.
+PRODUCT_PACKAGES += \
+    twrp_linker64 \
+    twrp_recovery_sh \
+    twrp_keymaster41_service \
+    twrp_gatekeeper10_service \
+    twrp_gatekeeper10_impl \
+    twrp_gatekeeper_default \
+    twrp_libsoftgatekeeper
 
 # ============================================================
 # Boot HAL backend (passthrough impl) for A/B slot switching
@@ -114,8 +118,9 @@ PRODUCT_COPY_FILES += \
 # stage the prebuilt pulled from a known-good TWRP for this SoC. Without it the
 # boot HAL service cannot provide IBootControl and TWRP cannot switch the active
 # A/B slot (Reboot -> System fails -> always returns to recovery).
-PRODUCT_COPY_FILES += \
-    device/zyb/k69v1_64_k419/recovery/root/system/lib64/hw/android.hardware.boot@1.0-impl-1.2.so:root/system/lib64/hw/android.hardware.boot@1.0-impl-1.2.so
+# Boot HAL passthrough impl is installed as a prebuilt module (twrp_boot_impl_12)
+# below, also because ELF files cannot go through PRODUCT_COPY_FILES.
+PRODUCT_PACKAGES += twrp_boot_impl_12
 
 # ============================================================
 # Recovery binary (TWRP/recovery executable)
@@ -128,3 +133,101 @@ PRODUCT_COPY_FILES += \
 # ALLOW_MISSING_DEPENDENCIES=true.
 PRODUCT_PACKAGES += \
     recovery
+# ============================================================
+# Prebuilt ELF modules for the recovery ramdisk
+# ============================================================
+# Installed into $(TARGET_ROOT_OUT) (the ramdisk root) via BUILD_PREBUILT. The
+# recovery-ramdisk recipe rsyncs $(TARGET_ROOT_OUT) into the recovery root, so
+# these land in the final recovery/boot ramdisk. We must use proper prebuilt
+# modules (not PRODUCT_COPY_FILES) because the build rejects ELF files placed
+# into the ramdisk via PRODUCT_COPY_FILES (check-non-elf-file-timestamps).
+# Source binaries live under prebuilt/ (moved out of recovery/root so the
+# recovery-ramdisk recipe no longer trips the ELF check on them).
+
+# --- linker64 (64-bit dynamic linker) ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_linker64
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/system/bin
+LOCAL_SRC_FILES := prebuilt/system/bin/linker64
+LOCAL_MODULE_STEM := linker64
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
+
+# --- sh (recovery shell) ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_recovery_sh
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/system/bin
+LOCAL_SRC_FILES := prebuilt/system/bin/sh
+LOCAL_MODULE_STEM := sh
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
+
+# --- keymaster@4.1 service binary ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_keymaster41_service
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/vendor/bin/hw
+LOCAL_SRC_FILES := prebuilt/vendor/bin/hw/android.hardware.keymaster@4.1-service
+LOCAL_MODULE_STEM := android.hardware.keymaster@4.1-service
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
+
+# --- gatekeeper@1.0 service binary ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_gatekeeper10_service
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/vendor/bin/hw
+LOCAL_SRC_FILES := prebuilt/vendor/bin/hw/android.hardware.gatekeeper@1.0-service
+LOCAL_MODULE_STEM := android.hardware.gatekeeper@1.0-service
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
+
+# --- gatekeeper@1.0 HAL impl (.so) ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_gatekeeper10_impl
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/vendor/lib64/hw
+LOCAL_SRC_FILES := prebuilt/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so
+LOCAL_MODULE_STEM := android.hardware.gatekeeper@1.0-impl.so
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
+
+# --- gatekeeper.default.so ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_gatekeeper_default
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/vendor/lib64/hw
+LOCAL_SRC_FILES := prebuilt/vendor/lib64/hw/gatekeeper.default.so
+LOCAL_MODULE_STEM := gatekeeper.default.so
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
+
+# --- libSoftGatekeeper.so ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_libsoftgatekeeper
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/vendor/lib64/hw
+LOCAL_SRC_FILES := prebuilt/vendor/lib64/hw/libSoftGatekeeper.so
+LOCAL_MODULE_STEM := libSoftGatekeeper.so
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
+
+# --- boot HAL passthrough impl (.so) for A/B slot switching ---
+include $(CLEAR_VARS)
+LOCAL_PATH := $(call my-dir)
+LOCAL_MODULE := twrp_boot_impl_12
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/system/lib64/hw
+LOCAL_SRC_FILES := prebuilt/system/lib64/hw/android.hardware.boot@1.0-impl-1.2.so
+LOCAL_MODULE_STEM := android.hardware.boot@1.0-impl-1.2.so
+LOCAL_CHECK_ELF_FILES := false
+include $(BUILD_PREBUILT)
