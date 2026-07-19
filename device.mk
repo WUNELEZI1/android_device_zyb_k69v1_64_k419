@@ -82,3 +82,15 @@ PRODUCT_COPY_FILES += \
     device/zyb/k69v1_64_k419/recovery/root/init.recovery.usb.rc:root/init.recovery.usb.rc \
     device/zyb/k69v1_64_k419/recovery/root/ueventd.mt6768.rc:root/ueventd.mt6768.rc \
     device/zyb/k69v1_64_k419/recovery/root/system/etc/recovery.fstab:root/system/etc/recovery.fstab
+
+# ============================================================
+# Recovery binary (TWRP/recovery executable)
+# ============================================================
+# Explicitly request the recovery module. It is installed at
+# /system/bin/recovery (launched by init via init.recovery.*.rc) and is what
+# actually presents the TWRP UI. The build system also auto-adds it when
+# TARGET_NO_RECOVERY is unset, but listing it here keeps the dependency
+# explicit and stops it being silently dropped under
+# ALLOW_MISSING_DEPENDENCIES=true.
+PRODUCT_PACKAGES += \
+    recovery
