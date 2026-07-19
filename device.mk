@@ -63,3 +63,22 @@ PRODUCT_PACKAGES += \
 # bootctrl for A/B slot switching from recovery (Switch Slot).
 PRODUCT_PACKAGES += \
     bootctrl
+
+# ============================================================
+# Recovery ramdisk baseline -> /root
+# ============================================================
+# The TWRP recovery-ramdisk recipe (core/Makefile
+# $(INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP)) does an unconditional
+#   rsync -a $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
+# i.e. it copies out/target/product/<dev>/root into the recovery root.
+# In a recovery-only TWRP tree (recovery-in-boot, dynamic partitions)
+# nothing else installs to $(TARGET_ROOT_OUT), so /root is never created
+# and the rsync fails with: rsync ... /root ... "No such file or directory".
+# Staging the recovery baseline here makes /root exist; the device
+# recovery/root (copied by the recipe afterwards) overrides it, so the
+# exact content below is irrelevant -- only /root's existence matters.
+PRODUCT_COPY_FILES += \
+    device/zyb/k69v1_64_k419/recovery/root/init.recovery.mt6768.rc:root/init.recovery.mt6768.rc \
+    device/zyb/k69v1_64_k419/recovery/root/init.recovery.usb.rc:root/init.recovery.usb.rc \
+    device/zyb/k69v1_64_k419/recovery/root/ueventd.mt6768.rc:root/ueventd.mt6768.rc \
+    device/zyb/k69v1_64_k419/recovery/root/system/etc/recovery.fstab:root/system/etc/recovery.fstab

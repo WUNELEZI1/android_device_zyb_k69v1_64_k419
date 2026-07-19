@@ -96,29 +96,20 @@ AB_OTA_PARTITIONS += \
     product
 
 BOARD_USES_RECOVERY_AS_BOOT := true
-TARGET_NO_RECOVERY := false
 
-# Recovery-as-boot ramdisk staging (paired with BOARD_USES_RECOVERY_AS_BOOT := true above).
-# WHY THIS IS REQUIRED (verified against build/make android-12.1 core/Makefile):
-#   * The recovery-ramdisk recipe ($(INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP),
-#     core/Makefile ~line 2196) UNCONDITIONALLY does:
-#       rsync -a --exclude=sdcard ... $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
-#     i.e. it rsyncs FROM $(PRODUCT_OUT)/root into recovery/. There is NO
-#     BOARD_USES_RECOVERY_AS_BOOT branch that avoids /root.
-#   * $(TARGET_ROOT_OUT) (= out/.../root) is only populated when
-#     BUILDING_RAMDISK_IMAGE is true. AOSP core/config.mk sets
-#     BUILDING_RAMDISK_IMAGE := $(PRODUCT_BUILD_RAMDISK_IMAGE) and then CLEARS it
-#     whenever BOARD_BUILD_SYSTEM_ROOT_IMAGE is true. On a dynamic-partition A12
-#     device BOARD_BUILD_SYSTEM_ROOT_IMAGE DEFAULTS TO TRUE, so without the line
-#     below BUILDING_RAMDISK_IMAGE is cleared, /root is never staged, and the
-#     build fails at ~99% with: rsync ... /root ... "No such file or directory".
-#   * Setting this to false keeps BUILDING_RAMDISK_IMAGE true, so /root is built
-#     and the rsync succeeds. (PRODUCT_BUILD_RAMDISK_IMAGE := true in
-#     twrp_k69v1_64_k419.mk is kept as belt-and-suspenders; the gate above is the
-#     real fix.) NOTE: an older Android-base TWRP tree for this same device
-#     (XiKoTaSu) omits this flag only because its Makefile logic differs — on
-#     android-12.1 it is mandatory.
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
+# Recovery ramdisk baseline (/root)
+# The TWRP recovery-ramdisk recipe (core/Makefile:
+# $(INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP)) does an unconditional
+#   rsync -a $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
+# copying out/target/product/<dev>/root into the recovery root. In a
+# recovery-only TWRP tree (recovery-in-boot, dynamic partitions) nothing
+# else installs to $(TARGET_ROOT_OUT), so /root would never be created and
+# the rsync fails with "No such file or directory". The device tree stages
+# the recovery baseline into /root via PRODUCT_COPY_FILES in device.mk so the
+# directory exists; recovery/root then overrides it (content is irrelevant).
+# NOTE: BOARD_BUILD_SYSTEM_ROOT_IMAGE must stay false/unset here -- it cannot
+# be true for dynamic-partition devices (build error), and even when true it
+# would not help this recovery-in-boot, header-v2 setup.
 
 # ============================================================
 # Dynamic partitions (Virtual A/B + VABC enabled on device)
