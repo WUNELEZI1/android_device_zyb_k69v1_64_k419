@@ -210,12 +210,14 @@ BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 # FastbootD / repack tools (A/B)
 # ============================================================
 TW_INCLUDE_FASTBOOTD := true
-TW_INCLUDE_REPACKTOOLS := true
+# repacktools (magiskboot) omitted: minor recovery-ramdisk saving vs the 32 MB boot limit.
+TW_INCLUDE_REPACKTOOLS := false
 
 # ============================================================
 # Languages
 # ============================================================
-TW_EXTRA_LANGUAGES := true
+# Extra (non-default) locales omitted to save ramdisk space; zh_CN default kept.
+TW_EXTRA_LANGUAGES := false
 TW_DEFAULT_LANGUAGE := zh_CN
 
 # ============================================================
@@ -226,11 +228,18 @@ TW_EXCLUDE_APEX := true
 # ============================================================
 # Misc TWRP tweaks
 # ============================================================
-TW_INCLUDE_NTFS_3G := true
+# NTFS-3G omitted: this device needs no NTFS userdata/SD, and it is the single
+# largest optional recovery component (~1.5-2 MB). Same bucket as the f2fs tools
+# we already dropped. This is the main cut that gets boot.img back under the
+# 32 MB boot partition. To restore NTFS SD support later WITHOUT losing it,
+# strip the unused 32-bit (arm) libs from the recovery ramdisk instead (keeps
+# every 64-bit component) -- see memory note 2026-07-19.
+TW_INCLUDE_NTFS_3G := false
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true
-TW_INCLUDE_LPTOOLS := true
-TW_INCLUDE_LPDUMP := true
+# lp tools / lpdump omitted: minor recovery-ramdisk savings.
+TW_INCLUDE_LPTOOLS := false
+TW_INCLUDE_LPDUMP := false
 TW_NO_SCREEN_BLANK := true
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
