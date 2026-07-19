@@ -102,7 +102,10 @@ PRODUCT_COPY_FILES += \
     device/zyb/k69v1_64_k419/recovery/root/system/bin/linker64:root/system/bin/linker64 \
     device/zyb/k69v1_64_k419/recovery/root/system/bin/sh:root/system/bin/sh \
     device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.keymaster@4.1-service:root/vendor/bin/hw/android.hardware.keymaster@4.1-service \
-    device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service:root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service
+    device/zyb/k69v1_64_k419/recovery/root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service:root/vendor/bin/hw/android.hardware.gatekeeper@1.0-service \
+    device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so:root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so \
+    device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/gatekeeper.default.so:root/vendor/lib64/hw/gatekeeper.default.so \
+    device/zyb/k69v1_64_k419/recovery/root/vendor/lib64/hw/libSoftGatekeeper.so:root/vendor/lib64/hw/libSoftGatekeeper.so
 
 # ============================================================
 # Recovery binary (TWRP/recovery executable)
