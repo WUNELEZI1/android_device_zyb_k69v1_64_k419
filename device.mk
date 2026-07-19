@@ -33,13 +33,14 @@ PRODUCT_PACKAGES += \
 # ============================================================
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
 
+# ext4 tools (needed: /data and several partitions are ext4, used by TWRP
+# backup/restore/format). The f2fs tools (sload_f2fs / make_f2fs / fsck.f2fs)
+# are dropped: this device has no f2fs userdata/partition, they only bloat the
+# recovery ramdisk. Every KB counts against the 32 MB boot-partition limit.
 PRODUCT_PACKAGES += \
     e2fsdroid \
     mke2fs \
-    resize2fs \
-    sload_f2fs \
-    make_f2fs \
-    fsck.f2fs
+    resize2fs
 
 # snapuserd: userspace daemon for Virtual A/B (VABC) snapshot management.
 # Required so TWRP can flash/rollback the dynamic (super) partitions on this
