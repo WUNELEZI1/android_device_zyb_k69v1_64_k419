@@ -134,17 +134,6 @@ PRODUCT_PACKAGES += twrp_boot_impl_12
 PRODUCT_PACKAGES += \
     recovery
 # ============================================================
-# adbd (for adb shell diagnostics inside recovery)
-# The lean core_64_bit.mk recovery ramdisk does not always build adbd
-# on its own across every minimal TWRP manifest, so list it explicitly
-# to guarantee the adbd binary lands in the ramdisk. init.recovery.usb.rc
-# does "start adbd" once usb config includes adb. Small (~200 KB); the
-# 32 MB boot budget is already kept tight (aosp_base / NTFS-3G / f2fs
-# tools / apex / repacktools / extra languages all dropped).
-PRODUCT_PACKAGES += \
-    adbd
-
-# ============================================================
 # Prebuilt ELF ramdisk binaries (twrp_linker64, twrp_recovery_sh,
 # twrp_keymaster41_service, twrp_gatekeeper10_service, twrp_gatekeeper10_impl,
 # twrp_gatekeeper_default, twrp_libsoftgatekeeper, twrp_boot_impl_12) are defined
