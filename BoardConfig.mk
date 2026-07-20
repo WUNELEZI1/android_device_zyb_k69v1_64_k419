@@ -61,7 +61,13 @@ BOARD_KERNEL_OFFSET := 0x00008000
 BOARD_RAMDISK_OFFSET := 0x07c08000
 BOARD_KERNEL_TAGS_OFFSET := 0x0bc08000
 BOARD_DTB_OFFSET := 0x0bc08000
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=user
+# Kernel cmdline. CRITICAL: do NOT add "twrpfastboot=1".
+# That flag makes TWRP boot into its headless fastboot sub-mode: no GUI,
+# frozen boot-logo on screen, and "TWRP does not appear to be running".
+# The senior base image carried it and therefore never showed a GUI.
+# Keep recovery (GUI) mode as the default. Values below match the senior
+# image's proven-booting cmdline, minus the fastboot flag.
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng
 
 BOARD_MKBOOTIMG_ARGS += --base $(BOARD_KERNEL_BASE)
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
