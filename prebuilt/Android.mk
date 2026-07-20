@@ -104,7 +104,7 @@ include $(BUILD_PREBUILT)
 # --- twrp_boot_impl_12 (installs as android.hardware.boot@1.0-impl-1.2) ---
 include $(CLEAR_VARS)
 LOCAL_MODULE := twrp_boot_impl_12
-LOCAL_MODULE_STEM := android.hardware.boot@1.0-impl-1.2
+LOCAL_MODULE_STEM := android.hardware.boot@1.0-impl-1.2.so
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/system/lib64/hw
 LOCAL_SRC_FILES := system/lib64/hw/android.hardware.boot@1.0-impl-1.2.so
