@@ -1,3 +1,4 @@
-# Raw (uncompressed) ARM64 Image backup. The committed kernel is the
-# gzipped Image.gz (prebuilt/kernel) which fits the 32MB boot partition.
-prebuilt/kernel-Image.raw
+# prebuilt/kernel is the gzip-compressed ARM64 Image committed to fit the
+# 32MB boot partition. Ignore any locally-extracted raw (uncompressed)
+# Image backup so it is never committed by accident.
+prebuilt/kernel-*.raw
