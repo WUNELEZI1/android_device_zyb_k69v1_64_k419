@@ -55,3 +55,31 @@ allow recovery init:process { sigkill signal };
 # MTK 特有
 allow recovery block_device:dir { search };
 allow recovery sysfs:file { read write open getattr };
+
+# ============================================================
+# SELinux 宽容策略 + GUI 关键权限 (2026-07-20)
+# 实测：enforcing 下 recovery 进程在初始化阶段被 SELinux 杀掉 -> 无 GUI；
+# 加 permissive 后 TWRP 正常出 GUI。此处双保险：
+#   (1) BoardConfig.mk 的 cmdline 加 androidboot.selinux=permissive（全局）；
+#   (2) 下面的 permissive recovery（域级，防 cmdline 在某些启动路径被忽略）。
+# 下方 allow 规则为将来切回 enforcing 做准备：待在运行中的 TWRP 抓
+#   adb shell dmesg 里的 avc denied 逐条补全后，即可删除 permissive 两处、切 enforcing。
+# ============================================================
+permissive recovery;
+
+# --- GUI / framebuffer / GPU / 触摸输入（minuitwrp 必需）---
+allow recovery graphics_device:chr_file { read write open ioctl getattr };
+allow recovery graphics_device:dir { read search open getattr };
+allow recovery gpu_device:chr_file { read write open ioctl getattr };
+allow recovery input_device:chr_file { read write open ioctl getattr };
+allow recovery input_device:dir { read search open getattr };
+
+# --- TWRP 从 /tmp 执行脚本 ---
+allow recovery tmpfs:file { execute };
+
+# --- 属性设置（TWRP 设 crypto/twrp.* 等属性触发 rc）---
+allow recovery default_prop:property_service { set };
+allow recovery recovery_prop:property_service { set };
+
+# --- 自身进程能力（挂载/设备节点/内存执行等常见需求）---
+allow recovery self:capability { dac_override dac_read_search chown fowner fsetid mknod sys_admin sys_rawio sys_boot };
