@@ -38,6 +38,15 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 # Required by build/make/core/board_config.mk in Android 12+, otherwise
 # it errors: "Building a 32-bit-app-only product on a 64-bit device."
 TARGET_SUPPORTS_64_BIT_APPS := true
+# Drop the 32-bit (arm) secondary architecture from the recovery ramdisk.
+# Every prebuilt we stage (linker64, sh, keymaster/gatekeeper services,
+# boot impl) is ELF64, and /init + the TWRP recovery binary are 64-bit
+# only, so the /system/lib (32-bit) tree is dead weight. Removing it is
+# the single biggest safe space saving and keeps us well under the
+# 33554432-byte (32 MB) boot partition. Revert this line if any module
+# ever requires a 32-bit lib at recovery time.
+TARGET_NO_2ND_ARCH := true
+
 
 # ============================================================
 # Kernel (prebuilt) - boot header v2, dtb embedded in boot.img
