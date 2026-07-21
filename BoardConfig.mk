@@ -9,6 +9,10 @@
 
 DEVICE_PATH := device/zyb/k69v1_64_k419
 
+# For building with minimal manifest — allow modules whose source is absent
+# to be silently skipped rather than failing the build.
+ALLOW_MISSING_DEPENDENCIES := true
+
 # ============================================================
 # Platform
 # ============================================================

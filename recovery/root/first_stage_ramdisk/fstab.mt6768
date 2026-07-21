@@ -10,7 +10,7 @@ system_ext /system_ext ext4 ro wait,slotselect,avb=vbmeta_system,logical,first_s
 vendor /vendor ext4 ro wait,slotselect,avb,logical,first_stage_mount
 product /product ext4 ro wait,slotselect,avb,logical,first_stage_mount
 /md_udc /metadata ext4 noatime,nosuid,nodev,discard wait,check,formattable,first_stage_mount
-/userdata /data ext4 noatime,nosuid,nodev,noauto_da_alloc,errors=panic,inlinecrypt wait,check,formattable,quota,latemount,resize,,reservedsize=128m,checkpoint=block,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption
+/userdata /data ext4 noatime,nosuid,nodev,noauto_da_alloc,errors=panic,inlinecrypt wait,check,formattable,quota,latemount,resize,reservedsize=128m,checkpoint=block,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption
 /protect1 /mnt/vendor/protect_f ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
 /protect2 /mnt/vendor/protect_s ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
 /nvdata /mnt/vendor/nvdata ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable

@@ -51,9 +51,15 @@ PRODUCT_PACKAGES += \
 # ============================================================
 # Keymaster 4.1 / Gatekeeper 1.0 (for FBE decryption in recovery)
 # ============================================================
+# NOTE: The source for these HAL services is NOT in the minimal TWRP manifest.
+# We use prebuilt binaries from a working TWRP for this SoC (see prebuilt/Android.mk).
+# The twrp_* module names map to the real runtime paths via LOCAL_MODULE_STEM.
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-service \
-    android.hardware.keymaster@4.1-service
+    twrp_gatekeeper10_service \
+    twrp_gatekeeper10_impl \
+    twrp_gatekeeper_default \
+    twrp_libsoftgatekeeper \
+    twrp_keymaster41_service
 
 # Health HAL, started by init.recovery.mt6768.rc ("start health-hal-2-1").
 PRODUCT_PACKAGES += \
@@ -83,7 +89,7 @@ PRODUCT_COPY_FILES += \
     device/zyb/k69v1_64_k419/recovery/root/system/etc/recovery.fstab:root/system/etc/recovery.fstab
 
 # ============================================================
-# Critical missing binaries (fix bootloop + enable decryption)
+# Critical missing binaries (fix bootloop)
 # ============================================================
 # linker64 (64-bit dynamic linker): the recovery ramdisk /init ->
 # /system/bin/init is a dynamically-linked ELF whose PT_INTERP is
@@ -91,23 +97,14 @@ PRODUCT_COPY_FILES += \
 # /init -> kernel panic -> black-screen bootloop. The minimal TWRP
 # manifest does not build bionic's linker into the recovery ramdisk,
 # so we stage the prebuilt (from a known-good TWRP for this SoC).
-# keymaster@4.1 / gatekeeper@1.0: declared in PRODUCT_PACKAGES above
-# but source is absent from the minimal manifest and silently skipped
-# under ALLOW_MISSING_DEPENDENCIES=true. Both are dynamically linked
-# (interpreter /system/bin/linker64) and required for FBE data
-# decryption in recovery. Providing prebuilts here fixes both.
+# sh: required for shell execution in recovery (adbd shell, scripts).
 # These ELF binaries are installed as proper prebuilt modules (BUILD_PREBUILT,
-# defined at the end of this file) into $(TARGET_ROOT_OUT). The recovery build
+# defined in prebuilt/Android.mk) into $(TARGET_ROOT_OUT). The recovery build
 # REJECTS ELF files staged via PRODUCT_COPY_FILES into the ramdisk
 # (check-non-elf-file-timestamps); prebuilt modules are the correct mechanism.
 PRODUCT_PACKAGES += \
     twrp_linker64 \
-    twrp_recovery_sh \
-    twrp_keymaster41_service \
-    twrp_gatekeeper10_service \
-    twrp_gatekeeper10_impl \
-    twrp_gatekeeper_default \
-    twrp_libsoftgatekeeper
+    twrp_recovery_sh
 
 # ============================================================
 # Boot HAL backend (passthrough impl) for A/B slot switching
