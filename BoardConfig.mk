@@ -218,17 +218,15 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
 # ============================================================
-# FastbootD / repack tools (A/B)
+# FastbootD (A/B) — repacktools dropped to save ~1.5 MB
 # ============================================================
 TW_INCLUDE_FASTBOOTD := true
-# repacktools (magiskboot) omitted: minor recovery-ramdisk saving vs the 32 MB boot limit.
-TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_REPACKTOOLS := false
 
 # ============================================================
-# Languages
+# Languages — extra locales dropped to save ~1.5 MB
 # ============================================================
-# Extra (non-default) locales omitted to save ramdisk space; zh_CN default kept.
-TW_EXTRA_LANGUAGES := true
+TW_EXTRA_LANGUAGES := false
 TW_DEFAULT_LANGUAGE := zh_CN
 
 # ============================================================
@@ -237,23 +235,19 @@ TW_DEFAULT_LANGUAGE := zh_CN
 TW_EXCLUDE_APEX := true
 
 # ============================================================
-# Misc TWRP tweaks
+# Misc TWRP tweaks — trimmed to fit 32 MB boot partition
 # ============================================================
-# NTFS-3G omitted: this device needs no NTFS userdata/SD, and it is the single
-# largest optional recovery component (~1.5-2 MB). Same bucket as the f2fs tools
-# we already dropped. This is the main cut that gets boot.img back under the
-# 32 MB boot partition. To restore NTFS SD support later WITHOUT losing it,
-# strip the unused 32-bit (arm) libs from the recovery ramdisk instead (keeps
-# every 64-bit component) -- see memory note 2026-07-19.
+# NTFS-3G: not needed (no NTFS partitions on this device).
 TW_INCLUDE_NTFS_3G := false
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true
-# lp tools / lpdump omitted: minor recovery-ramdisk savings.
+# lp tools / lpdump: not needed in recovery ramdisk.
 TW_INCLUDE_LPTOOLS := false
 TW_INCLUDE_LPDUMP := false
 TW_SCREEN_BLANK_ON_BOOT := true
-TWRP_INCLUDE_LOGCAT := true
-TARGET_USES_LOGD := true
+# logcat/logd: dropped to save ~0.5 MB (debug-only, not needed for normal TWRP use).
+TWRP_INCLUDE_LOGCAT := false
+TARGET_USES_LOGD := false
 BOARD_SUPPRESS_SECURE_ERASE := true
 TW_DEVICE_VERSION := ZYB-ZPD1203-1.0
 
