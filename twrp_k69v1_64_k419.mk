@@ -22,14 +22,6 @@ $(call inherit-product, vendor/twrp/config/common.mk)
 $(call inherit-product, device/zyb/k69v1_64_k419/device.mk)
 
 # ============================================================
-# Kernel cmdline — override after common.mk to strip twrpfastboot
-# common.mk unconditionally appends "twrpfastboot=1 buildvariant=<>"
-# which makes TWRP boot into headless fastboot (no GUI).
-# Re-assign the correct cmdline here (:= overrides += appends).
-# ============================================================
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng androidboot.selinux=permissive
-
-# ============================================================
 # Product identifiers
 # ============================================================
 PRODUCT_DEVICE := k69v1_64_k419

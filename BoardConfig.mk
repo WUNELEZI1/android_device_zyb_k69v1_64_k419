@@ -73,10 +73,11 @@ BOARD_DTB_OFFSET := 0x0bc08000
 # Keep recovery (GUI) mode as the default. Values below match the senior
 # image's proven-booting cmdline, minus the fastboot flag.
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng androidboot.selinux=permissive
-# Disable TWRP fastboot sub-mode (twrpfastboot=1 in cmdline → no GUI).
-# TWRP common.mk unconditionally appends "twrpfastboot=1" via += at build
-# time; setting this flag prevents the append so the cmdline stays clean.
-#TW_NO_TWRPFASTBOOT := true
+# Disable TWRP fastboot sub-mode (twrpfastboot=1 in cmdline -> no GUI).
+# TWRP BoardConfigTWRP.mk unconditionally appends twrpfastboot=1 via
+# INTERNAL_KERNEL_CMDLINE += when BOARD_USES_RECOVERY_AS_BOOT=true.
+# TW_NO_FASTBOOT_BOOT is the official TWRP flag to prevent this.
+TW_NO_FASTBOOT_BOOT := true
 
 BOARD_MKBOOTIMG_ARGS += --base $(BOARD_KERNEL_BASE)
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
