@@ -21,18 +21,18 @@ TARGET_USES_UEFI := false
 # Architecture (device is 64/32 zygote; recovery is 64-bit only)
 # ============================================================
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a
+TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := cortex-a75
-TARGET_CPU_VARIANT_RUNTIME := cortex-a75
+TARGET_CPU_VARIANT := cortex-a53
+TARGET_CPU_VARIANT_RUNTIME := cortex-a53
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-2a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a75
-TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
+TARGET_2ND_CPU_VARIANT := cortex-a53
+TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a53
 
 # 64-bit device (arm64 + 32-bit 2nd arch) that supports 64-bit apps.
 # Required by build/make/core/board_config.mk in Android 12+, otherwise
@@ -160,7 +160,7 @@ BOARD_USES_METADATA_PARTITION := true
 # Set PLATFORM_VERSION explicitly to 12 to match the real firmware (not 12.1).
 # This variable is overridable (NOT readonly); an earlier build even accepted
 # 16.1.0 here, proving the build system takes the device-tree value.
-PLATFORM_VERSION := 12
+PLATFORM_VERSION := 16.1.0
 # Security patch pinned far in the future so the build never reports "expired"
 # (no real OTA checks run in recovery anyway).
 PLATFORM_SECURITY_PATCH := 2099-12-31
@@ -189,7 +189,7 @@ BOARD_HAS_FLIPPED_SCREEN := true
 # Brightness (MTK leds-mt65xx backlight)
 # ============================================================
 TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 128
+TW_DEFAULT_BRIGHTNESS := 80
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 
 # ============================================================
@@ -218,13 +218,13 @@ BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 # ============================================================
 TW_INCLUDE_FASTBOOTD := true
 # repacktools (magiskboot) omitted: minor recovery-ramdisk saving vs the 32 MB boot limit.
-TW_INCLUDE_REPACKTOOLS := false
+TW_INCLUDE_REPACKTOOLS := true
 
 # ============================================================
 # Languages
 # ============================================================
 # Extra (non-default) locales omitted to save ramdisk space; zh_CN default kept.
-TW_EXTRA_LANGUAGES := false
+TW_EXTRA_LANGUAGES := true
 TW_DEFAULT_LANGUAGE := zh_CN
 
 # ============================================================
@@ -247,7 +247,7 @@ TW_INCLUDE_LIBRESETPROP := true
 # lp tools / lpdump omitted: minor recovery-ramdisk savings.
 TW_INCLUDE_LPTOOLS := false
 TW_INCLUDE_LPDUMP := false
-TW_NO_SCREEN_BLANK := true
+TW_SCREEN_BLANK_ON_BOOT := true
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
 BOARD_SUPPRESS_SECURE_ERASE := true
