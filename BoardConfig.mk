@@ -76,7 +76,7 @@ BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng androidboot.seli
 # Disable TWRP fastboot sub-mode (twrpfastboot=1 in cmdline → no GUI).
 # TWRP common.mk unconditionally appends "twrpfastboot=1" via += at build
 # time; setting this flag prevents the append so the cmdline stays clean.
-TW_NO_TWRPFASTBOOT := true
+#TW_NO_TWRPFASTBOOT := true
 
 BOARD_MKBOOTIMG_ARGS += --base $(BOARD_KERNEL_BASE)
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
