@@ -124,8 +124,7 @@ PRODUCT_PACKAGES += \
     recovery
 # ============================================================
 # Prebuilt ELF ramdisk binaries (twrp_linker64, twrp_recovery_sh,
-# twrp_keymaster41_service, twrp_gatekeeper10_service, twrp_gatekeeper10_impl,
-# twrp_gatekeeper_default, twrp_libsoftgatekeeper, twrp_boot_impl_12) are defined
-# in prebuilt/Android.mk as BUILD_PREBUILT modules (auto-discovered by the build).
-# Their PRODUCT_PACKAGES entries above stay here; the module bodies moved there
-# so the build reliably picks them up regardless of product-config parsing.
+# twrp_boot_impl_12) are defined in prebuilt/Android.mk as BUILD_PREBUILT
+# modules (auto-discovered by the build). Their PRODUCT_PACKAGES entries
+# above stay here; the module bodies moved there so the build reliably
+# picks them up regardless of product-config parsing.

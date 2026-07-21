@@ -16,10 +16,8 @@
 # MTK vendor 分区
 /mnt/vendor(/.*)?              u:object_r:vendor_file:s0
 
-# keymaster/gatekeeper
-/vendor/bin/hw/android\.hardware\.keymaster@4\.1-service   u:object_r:hal_keymaster_default_exec:s0
-/vendor/bin/hw/android\.hardware\.gatekeeper@1\.0-service   u:object_r:hal_gatekeeper_default_exec:s0
-/vendor/bin/hw/android\.hardware\.boot@1\.2-service        u:object_r:hal_boot_default_exec:s0
+# boot HAL
+/vendor/bin/hw/android\.hardware\.boot@1\.2-service  u:object_r:hal_boot_default_exec:s0
 
 # sysfs
 /sys/devices/platform/leds-mt65xx(/.*)?   u:object_r:sysfs_leds:s0
@@ -41,6 +39,3 @@
 
 # 数据解密密钥
 /metadata/vold/metadata_encryption(/.*)?  u:object_r:vold_metadata_file:s0
-
-# boot HAL
-/vendor/bin/hw/android\.hardware\.boot@1\.2-service  u:object_r:hal_boot_default_exec:s0
