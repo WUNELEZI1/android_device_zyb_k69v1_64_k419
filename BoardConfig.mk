@@ -73,6 +73,10 @@ BOARD_DTB_OFFSET := 0x0bc08000
 # Keep recovery (GUI) mode as the default. Values below match the senior
 # image's proven-booting cmdline, minus the fastboot flag.
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng androidboot.selinux=permissive
+# Disable TWRP fastboot sub-mode (twrpfastboot=1 in cmdline → no GUI).
+# TWRP common.mk unconditionally appends "twrpfastboot=1" via += at build
+# time; setting this flag prevents the append so the cmdline stays clean.
+TW_NO_TWRPFASTBOOT := true
 
 BOARD_MKBOOTIMG_ARGS += --base $(BOARD_KERNEL_BASE)
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
@@ -147,16 +151,15 @@ TARGET_COPY_OUT_VENDOR := vendor
 TARGET_USES_MKE2FS := true
 
 # ============================================================
-# FBE / Metadata decryption (real device: FBE v2, inline crypt)
-#   contents  = aes-256-xts
-#   filenames = aes-256-cts
-#   policy    = v2
-#   metadata  = dm-default-key (keymaster protected, NOT hw-wrapped)
+# FBE / Metadata decryption — DISABLED to fit 32 MB boot limit
+#   Crypto components (keymaster/gatekeeper HALs + 12 .so libs)
+#   consume ~2-3 MB of ramdisk. Dropped for now; TWRP will boot
+#   with GUI but cannot decrypt FBE-encrypted /data. Re-enable
+#   later once ramdisk size is under control.
 # ============================================================
-TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_CRYPTO_FBE := true
-TW_INCLUDE_FBE_METADATA_DECRYPT := true
-# fscrypt policy (v2) is now auto-detected by TWRP 3.7.1 ("without setting Board")
+TW_INCLUDE_CRYPTO := false
+TW_INCLUDE_CRYPTO_FBE := false
+TW_INCLUDE_FBE_METADATA_DECRYPT := false
 BOARD_USES_METADATA_PARTITION := true
 # Security patch must match the real device
 # (ro.build.version.security_patch = 2024-07-05, per device_info/all_props.txt).
@@ -252,36 +255,8 @@ BOARD_SUPPRESS_SECURE_ERASE := true
 TW_DEVICE_VERSION := ZYB-ZPD1203-1.0
 
 # ============================================================
-# Recovery decryption HAL modules (keymaster 4.1 + gatekeeper 1.0)
+# Recovery device modules — keymaster/gatekeeper DROPPED to save ~2-3 MB.
+# Only boot HAL kept (needed for A/B slot switching).
 # ============================================================
 TARGET_RECOVERY_DEVICE_MODULES += \
-    android.hardware.boot@1.2-service \
-    libcppbor_external \
-    libkeymaster4 \
-    libkeymaster41 \
-    libkeymaster4_1support \
-    libkeymaster4support \
-    libkeymaster_messages \
-    libkeymaster_portable \
-    libpuresoftkeymasterdevice \
-    libsoft_attestation_cert \
-    libkeystore-engine-wifi-hidl \
-    libkeystore-wifi-hidl \
-    android.hardware.gatekeeper@1.0 \
-    android.hardware.keymaster@3.0 \
-    android.hardware.keymaster@4.0 \
-    android.hardware.keymaster@4.1
-
-RECOVERY_LIBRARY_SOURCE_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster41.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4_1support.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4support.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster_messages.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster_portable.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.gatekeeper@1.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@3.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@4.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@4.1.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeystore-engine-wifi-hidl.so
+    android.hardware.boot@1.2-service

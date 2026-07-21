@@ -49,17 +49,9 @@ PRODUCT_PACKAGES += \
     snapuserd
 
 # ============================================================
-# Keymaster 4.1 / Gatekeeper 1.0 (for FBE decryption in recovery)
+# Keymaster 4.1 / Gatekeeper 1.0 — DROPPED to fit 32 MB boot limit
+# FBE decryption disabled for now. Re-enable when ramdisk size allows.
 # ============================================================
-# NOTE: The source for these HAL services is NOT in the minimal TWRP manifest.
-# We use prebuilt binaries from a working TWRP for this SoC (see prebuilt/Android.mk).
-# The twrp_* module names map to the real runtime paths via LOCAL_MODULE_STEM.
-PRODUCT_PACKAGES += \
-    twrp_gatekeeper10_service \
-    twrp_gatekeeper10_impl \
-    twrp_gatekeeper_default \
-    twrp_libsoftgatekeeper \
-    twrp_keymaster41_service
 
 # Health HAL, started by init.recovery.mt6768.rc ("start health-hal-2-1").
 PRODUCT_PACKAGES += \

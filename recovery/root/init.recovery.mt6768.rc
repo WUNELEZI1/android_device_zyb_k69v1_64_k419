@@ -25,44 +25,8 @@ service mtk.plpath.utils /system/bin/mtk_plpath_utils
     oneshot
     seclabel u:r:recovery:s0
 
-service gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
-    interface android.hardware.gatekeeper@1.0::IGatekeeper default
-    disabled
-    user root
-    group root
-    seclabel u:r:recovery:s0
-
-service keymaster-4-1 /vendor/bin/hw/android.hardware.keymaster@4.1-service
-    interface android.hardware.keymaster@4.0::IKeymasterDevice default
-    interface android.hardware.keymaster@4.1::IKeymasterDevice default
-    disabled
-    user root
-    group root drmrpc
-    seclabel u:r:recovery:s0
-
-on property:crypto.ready=1
-    start keymaster-4-1
-    start gatekeeper-1-0
-
-on property:crypto.ready=0
-    stop mobicore
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-
-on property:ro.crypto.state=unsupported
-    stop mobicore
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-
-on property:ro.crypto.state=unencrypted
-    stop mobicore
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-
-on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
-    stop mobicore
-    stop keymaster-4-1
-    stop gatekeeper-1-0
+# keymaster/gatekeeper services removed — FBE decryption disabled to fit 32 MB boot.
+# Re-enable when ramdisk size allows (see BoardConfig.mk TW_INCLUDE_CRYPTO).
 
 on post-fs-data
     mkdir /data/vendor_de 0770 system system
