@@ -66,12 +66,7 @@ BOARD_KERNEL_OFFSET := 0x00008000
 BOARD_RAMDISK_OFFSET := 0x07c08000
 BOARD_KERNEL_TAGS_OFFSET := 0x0bc08000
 BOARD_DTB_OFFSET := 0x0bc08000
-# Kernel cmdline. CRITICAL: do NOT add "twrpfastboot=1".
-# That flag makes TWRP boot into its headless fastboot sub-mode: no GUI,
-# frozen boot-logo on screen, and "TWRP does not appear to be running".
-# The senior base image carried it and therefore never showed a GUI.
-# Keep recovery (GUI) mode as the default. Values below match the senior
-# image's proven-booting cmdline, minus the fastboot flag.
+# Kernel cmdline — base parameters from proven-booting stock image.
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE += twrpfastboot=1
 
@@ -132,7 +127,7 @@ TW_ALWAYS_RMRF := true
 # ============================================================
 BOARD_SUPER_PARTITION_SIZE := 10737418240
 BOARD_SUPER_PARTITION_GROUPS := zyb_dynamic_partitions
-BOARD_ZYB_DYNAMIC_PARTITIONS_SIZE := 10695475200
+BOARD_ZYB_DYNAMIC_PARTITIONS_SIZE := 10733223936
 BOARD_ZYB_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product
 
 # ============================================================
@@ -155,6 +150,7 @@ TARGET_USES_MKE2FS := true
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_FBE := true
 TW_PREPARE_DATA_MEDIA := true
+TW_PREPARE_DATA_MEDIA_EARLY := true
 TW_USE_KEYMASTER := true
 TW_KEYMASTER_VERSION := 4.1
 TW_CRYPTO_USE_FBE := true
@@ -179,7 +175,6 @@ PLATFORM_VERSION := 16.1.0
 # (no real OTA checks run in recovery anyway).
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
-TW_PREPARE_DATA_MEDIA := true
 RECOVERY_SDCARD_ON_DATA := true
 
 # ============================================================
