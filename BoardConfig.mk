@@ -205,6 +205,7 @@ TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 # USB / MTP (controller = musb-hdrc, configfs gadget)
 # ============================================================
 TW_HAS_USB := true
+TW_HAS_MTP := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 # Blacklist the virtual "hbtp_vm" input device (MTK) to avoid phantom touches.
 TW_INPUT_BLACKLIST := "hbtp_vm"
@@ -225,7 +226,7 @@ BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 # ============================================================
 # FastbootD (A/B) — repacktools dropped to save ~1.5 MB
 # ============================================================
-TW_INCLUDE_FASTBOOTD := true
+TW_INCLUDE_FASTBOOTD := false
 TW_INCLUDE_REPACKTOOLS := false
 
 # ============================================================
