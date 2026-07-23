@@ -17,11 +17,8 @@ PRODUCT_TARGET_VNDK_VERSION := 31
 PRODUCT_VENDOR_MOVE_ENABLED := true
 
 # ============================================================
-# A/B OTA + fastbootd
+# A/B OTA (fastbootd removed to save space)
 # ============================================================
-PRODUCT_PACKAGES += \
-    android.hardware.fastboot@1.1-impl-mock \
-    fastbootd
 
 PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-service
