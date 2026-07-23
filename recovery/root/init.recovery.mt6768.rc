@@ -42,3 +42,5 @@ on boot
     # reboot always returns to recovery (the same bug as the senior
     # TWRP build, which also leaves the boot HAL disabled).
     start boot-hal-1-2
+    # 启动 Keymaster 服务用于 FBE 解密
+    start vendor.keymaster-4-1

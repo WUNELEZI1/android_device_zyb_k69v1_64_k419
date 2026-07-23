@@ -73,11 +73,7 @@ BOARD_DTB_OFFSET := 0x0bc08000
 # Keep recovery (GUI) mode as the default. Values below match the senior
 # image's proven-booting cmdline, minus the fastboot flag.
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng androidboot.selinux=permissive
-# Disable TWRP fastboot sub-mode (twrpfastboot=1 in cmdline -> no GUI).
-# TWRP BoardConfigTWRP.mk unconditionally appends twrpfastboot=1 via
-# INTERNAL_KERNEL_CMDLINE += when BOARD_USES_RECOVERY_AS_BOOT=true.
-# TW_NO_FASTBOOT_BOOT is the official TWRP flag to prevent this.
-TW_NO_FASTBOOT_BOOT := true
+BOARD_KERNEL_CMDLINE += twrpfastboot=1
 
 BOARD_MKBOOTIMG_ARGS += --base $(BOARD_KERNEL_BASE)
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
@@ -112,6 +108,8 @@ AB_OTA_PARTITIONS += \
     product
 
 BOARD_USES_RECOVERY_AS_BOOT := true
+TW_NO_BOOT_RECOVERY := true
+TW_ALWAYS_RMRF := true
 
 # Recovery ramdisk baseline (/root)
 # The TWRP recovery-ramdisk recipe (core/Makefile:
@@ -133,9 +131,9 @@ BOARD_USES_RECOVERY_AS_BOOT := true
 # auto-derived from BOARD_SUPER_PARTITION_SIZE below.
 # ============================================================
 BOARD_SUPER_PARTITION_SIZE := 10737418240
-BOARD_SUPER_PARTITION_GROUPS := main
-BOARD_MAIN_SIZE := 10733223936
-BOARD_MAIN_PARTITION_LIST := system system_ext vendor product
+BOARD_SUPER_PARTITION_GROUPS := zyb_dynamic_partitions
+BOARD_ZYB_DYNAMIC_PARTITIONS_SIZE := 10695475200
+BOARD_ZYB_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product
 
 # ============================================================
 # Filesystem
@@ -152,15 +150,23 @@ TARGET_COPY_OUT_VENDOR := vendor
 TARGET_USES_MKE2FS := true
 
 # ============================================================
-# FBE / Metadata decryption — DISABLED to fit 32 MB boot limit
-#   Crypto components (keymaster/gatekeeper HALs + 12 .so libs)
-#   consume ~2-3 MB of ramdisk. Dropped for now; TWRP will boot
-#   with GUI but cannot decrypt FBE-encrypted /data. Re-enable
-#   later once ramdisk size is under control.
+# FBE / Metadata decryption — ENABLED for FBE support
 # ============================================================
-TW_INCLUDE_CRYPTO := false
-TW_INCLUDE_CRYPTO_FBE := false
-TW_INCLUDE_FBE_METADATA_DECRYPT := false
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_FBE := true
+TW_PREPARE_DATA_MEDIA := true
+TW_USE_KEYMASTER := true
+TW_KEYMASTER_VERSION := 4.1
+TW_CRYPTO_USE_FBE := true
+TW_CRYPTO_FBE_TYPE := aes-256-xts:aes-256-cts:v2
+
+# ============================================================
+# Ramdisk gzip compression (max level for size saving)
+# ============================================================
+BOARD_RAMDISK_COMPRESSOR := gzip
+BOARD_RAMDISK_COMPRESSOR_LEVEL := 9
+
+TW_NO_SCREEN_BLANK := true
 BOARD_USES_METADATA_PARTITION := true
 # Security patch must match the real device
 # (ro.build.version.security_patch = 2024-07-05, per device_info/all_props.txt).
@@ -173,7 +179,7 @@ PLATFORM_VERSION := 16.1.0
 # (no real OTA checks run in recovery anyway).
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
-TW_PREPARE_DATA_MEDIA_EARLY := true
+TW_PREPARE_DATA_MEDIA := true
 RECOVERY_SDCARD_ON_DATA := true
 
 # ============================================================
@@ -198,7 +204,7 @@ BOARD_HAS_FLIPPED_SCREEN := true
 # ============================================================
 TW_MAX_BRIGHTNESS := 255
 TW_DEFAULT_BRIGHTNESS := 80
-TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 
 # ============================================================
 # USB / MTP (controller = musb-hdrc, configfs gadget)

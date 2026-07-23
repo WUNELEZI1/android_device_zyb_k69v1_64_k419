@@ -128,3 +128,23 @@ PRODUCT_PACKAGES += \
 # modules (auto-discovered by the build). Their PRODUCT_PACKAGES entries
 # above stay here; the module bodies moved there so the build reliably
 # picks them up regardless of product-config parsing.
+
+# ============================================================
+# Keymaster 4.1 prebuilt files for FBE decryption in recovery
+# ============================================================
+PRODUCT_COPY_FILES += \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.1-service:recovery/root/vendor/bin/hw/android.hardware.keymaster@4.1-service \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.1-service.rc:recovery/root/vendor/etc/init/android.hardware.keymaster@4.1-service.rc \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster4.so:recovery/root/vendor/lib64/libkeymaster4.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster41.so:recovery/root/vendor/lib64/libkeymaster41.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster4_1support.so:recovery/root/vendor/lib64/libkeymaster4_1support.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster4support.so:recovery/root/vendor/lib64/libkeymaster4support.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster_messages.so:recovery/root/vendor/lib64/libkeymaster_messages.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster_portable.so:recovery/root/vendor/lib64/libkeymaster_portable.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libsoft_attestation_cert.so:recovery/root/vendor/lib64/libsoft_attestation_cert.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libpuresoftkeymasterdevice.so:recovery/root/vendor/lib64/libpuresoftkeymasterdevice.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libcppbor_external.so:recovery/root/vendor/lib64/libcppbor_external.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/libcppcose_rkp.so:recovery/root/vendor/lib64/libcppcose_rkp.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@3.0.so:recovery/root/vendor/lib64/android.hardware.keymaster@3.0.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.0.so:recovery/root/vendor/lib64/android.hardware.keymaster@4.0.so \
+    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.1.so:recovery/root/vendor/lib64/android.hardware.keymaster@4.1.so

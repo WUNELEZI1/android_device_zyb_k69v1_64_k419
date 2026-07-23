@@ -8,8 +8,8 @@ system_ext  /system_ext  ext4    ro    wait,slotselect,avb=vbmeta_system,logical
 vendor      /vendor      ext4    ro    wait,slotselect,avb,logical,first_stage_mount
 product     /product     ext4    ro    wait,slotselect,avb,logical,first_stage_mount
 
-# === userdata - FBE v2 inlinecrypt (fileencryption must match stock exactly) ===
-/dev/block/by-name/userdata     /data        ext4    noatime,nosuid,nodev,noauto_da_alloc,errors=panic,inlinecrypt    wait,check,formattable,quota,latemount,resize,reservedsize=128m,checkpoint=block,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption
+# === userdata - mounted as plain ext4 for TWRP first ===
+/dev/block/by-name/userdata     /data        ext4    noatime,nosuid,nodev,noauto_da_alloc,errors=panic    wait,check,formattable,quota,resize,reservedsize=128m
 
 # === metadata (FBE metadata encryption key storage) ===
 /dev/block/by-name/md_udc       /metadata    ext4    noatime,nosuid,nodev,discard    wait,check,formattable
