@@ -130,21 +130,21 @@ PRODUCT_PACKAGES += \
 # picks them up regardless of product-config parsing.
 
 # ============================================================
-# Keymaster 4.1 prebuilt files for FBE decryption in recovery
+# Keymaster 4.1 prebuilt modules for FBE decryption in recovery
 # ============================================================
-PRODUCT_COPY_FILES += \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.1-service:recovery/root/vendor/bin/hw/android.hardware.keymaster@4.1-service \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.1-service.rc:recovery/root/vendor/etc/init/android.hardware.keymaster@4.1-service.rc \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster4.so:recovery/root/vendor/lib64/libkeymaster4.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster41.so:recovery/root/vendor/lib64/libkeymaster41.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster4_1support.so:recovery/root/vendor/lib64/libkeymaster4_1support.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster4support.so:recovery/root/vendor/lib64/libkeymaster4support.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster_messages.so:recovery/root/vendor/lib64/libkeymaster_messages.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libkeymaster_portable.so:recovery/root/vendor/lib64/libkeymaster_portable.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libsoft_attestation_cert.so:recovery/root/vendor/lib64/libsoft_attestation_cert.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libpuresoftkeymasterdevice.so:recovery/root/vendor/lib64/libpuresoftkeymasterdevice.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libcppbor_external.so:recovery/root/vendor/lib64/libcppbor_external.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/libcppcose_rkp.so:recovery/root/vendor/lib64/libcppcose_rkp.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@3.0.so:recovery/root/vendor/lib64/android.hardware.keymaster@3.0.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.0.so:recovery/root/vendor/lib64/android.hardware.keymaster@4.0.so \
-    device/zyb/k69v1_64_k419/prebuilt/keymaster/android.hardware.keymaster@4.1.so:recovery/root/vendor/lib64/android.hardware.keymaster@4.1.so
+PRODUCT_PACKAGES += \
+    twrp_keymaster41_service \
+    twrp_keymaster41_rc \
+    twrp_android.hardware.keymaster@3.0 \
+    twrp_android.hardware.keymaster@4.0 \
+    twrp_android.hardware.keymaster@4.1 \
+    twrp_libcppbor_external \
+    twrp_libcppcose_rkp \
+    twrp_libkeymaster4 \
+    twrp_libkeymaster41 \
+    twrp_libkeymaster4_1support \
+    twrp_libkeymaster4support \
+    twrp_libkeymaster_messages \
+    twrp_libkeymaster_portable \
+    twrp_libsoft_attestation_cert \
+    twrp_libpuresoftkeymasterdevice
